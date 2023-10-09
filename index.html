@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <hgroup>
+      <h1>Date Calculator</h1>
+      <h2>Calculate dates including UK bank holidays</h2>
+    </hgroup>
+    <section id="input">
+      <div id="date">
+        <label for="date-input">Enter a date:</label>
+        <input id="date-input" type="date" id="date" />
+      </div>
+    </section>
+    <section id="results">
+      <div class="date-types">
+        <div class="date-value">
+          <aside>Today is:</aside>
+        </div>
+        <div class="date-value" id="reader-min-type">
+          <aside>No readers before:</aside>
+        </div>
+        <div class="date-value" id="reserve-until-type">
+          <aside>Reserve until:</aside>
+        </div>
+        <div class="date-value" id="one-reservation-before-type">
+          <aside>One reservation on/before:</aside>
+        </div>
+      </div>
+      <div class="date-values">
+        <div class="date-value" id="current-date">
+          <p>Enter Date...</p>
+        </div>
+        <div class="date-value" id="reader-min">
+          <p>Enter Date...</p>
+        </div>
+        <div class="date-value" id="reserve-until">
+          <p>Enter Date...</p>
+        </div>
+        <div class="date-value" id="one-reservation-before">
+          <p>Enter Date...</p>
+        </div>
+      </div>
+    </section>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -24,22 +24,6 @@ const getBankHolidays = async (region = "england-and-wales") => {
   return holidays;
 };
 
-addDays = (date, days, weekends = false) => {
-  let output = new Date(date);
-
-  if (weekends) {
-    let day = output.getDay();
-    return output.setDate(
-      output.getDate() +
-        days +
-        (day === 6 ? 2 : +!day) +
-        (Math.floor(days - 1 + (day % 6 | 1)) / 5) * 2
-    );
-  } else {
-    return new Date(output.setDate(output.getDate() + days));
-  }
-};
-
 getDatesBetween = (startDate, endDate) => {
   const start = new Date(startDate);
   const end = new Date(endDate);
@@ -53,6 +37,25 @@ getDatesBetween = (startDate, endDate) => {
   }
 
   return datesArray;
+};
+
+const addDays = (date, days, skipWeekends = false) => {
+  let resultDate = new Date(date);
+
+  while (days > 0) {
+    resultDate.setDate(resultDate.getDate() + 1);
+
+    if (
+      !(
+        skipWeekends &&
+        (resultDate.getDay() === 6 || resultDate.getDay() === 0)
+      )
+    ) {
+      days--;
+    }
+  }
+
+  return resultDate;
 };
 
 const addBankHolidays = async function (date, daysToAdd, weekends = false) {
@@ -71,6 +74,8 @@ const addBankHolidays = async function (date, daysToAdd, weekends = false) {
       }
     });
 
+    console.log("range length", dateRange.length);
+
     let totalDaysToAdd = dateRange.length + count;
 
     return addDays(startDate, totalDaysToAdd);
@@ -81,7 +86,7 @@ const addBankHolidays = async function (date, daysToAdd, weekends = false) {
 
 const today = new Date();
 
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
   currentDateEl.innerHTML = `
   <p>${today.toLocaleDateString("en-GB", dateOptions)}<p>
   `;
@@ -89,15 +94,19 @@ window.addEventListener("load", () => {
   readerMinEl.innerHTML = `
   <p>${addDays(today, 21).toLocaleDateString("en-GB", dateOptions)}</p>
   `;
-});
 
-dateInput.addEventListener("change", async () => {
-  const reserveUntil = await addBankHolidays(dateInput.value, 7, true);
+  const reserveUntil = await addBankHolidays(today, 5, true);
   reserveUntilEl.innerHTML = `
   <p>${reserveUntil.toLocaleDateString("en-GB", dateOptions)}</p>
   `;
+});
 
-  const oneReservationBefore = await addBankHolidays(dateInput.value, 27);
+dateInput.addEventListener("change", async () => {
+  const oneReservationBefore = await addBankHolidays(
+    dateInput.value,
+    27,
+    false
+  );
   oneReservationBeforeEl.innerHTML = `
   <p>${oneReservationBefore.toLocaleDateString("en-GB", dateOptions)}</p>
   `;
